@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>Juego WebSocket</title>
-  <script src="script.js" defer></script>
+  <script type="module" src="script.js" defer></script>
 </head>
 <body>
 
-  <h1>Juego WebSocket</h1>
+  <header> <h1>Juego WebSocket</h1> </header>
 
   <div id="login">
     <label>Usuario:</label>
@@ -23,6 +23,11 @@
     <input type="text" id="msgInput" placeholder="Escribe tu respuesta">
     <button id="sendBtn">Enviar</button>
   </div>
+
+  <footer>
+      <!-- Botón salir del juego -->
+      <button class="btn-exit">Salir del juego</button> 
+  </footer>
 
 </body>
 </html>
