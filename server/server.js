@@ -99,10 +99,6 @@ function randomFragment() {
   return fragments[Math.floor(Math.random() * fragments.length)];
 }
 
-<<<<<<< HEAD
-
-
-=======
 //Funcion para no repetir las mismas palabras
 function wordUsed(word) {
   if (wordPlayed.has(word)) {
@@ -114,4 +110,3 @@ function wordUsed(word) {
   return false;       
 
 }
->>>>>>> 0cab7e010e8165414af786b83c26f9c0c95f1c73
