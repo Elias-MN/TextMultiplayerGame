@@ -16,6 +16,8 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     const text = message.toString().trim().toLowerCase();
 
+    let contador = 5; 
+    
     if (!clients.has(ws)) {
       clients.set(ws, text);
       // Lo añadimos a la lista de turnos
