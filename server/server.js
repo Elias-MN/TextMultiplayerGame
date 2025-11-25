@@ -57,7 +57,7 @@ wss.on('connection', (ws) => {
       fragment: "",
       turn: "",
       players: [
-        {playerName: }
+        { playerName: name }
       ]
     }
     if (name) broadcast(json);
