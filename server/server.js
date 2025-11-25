@@ -90,3 +90,6 @@ function nextTurn() {
 function randomFragment() {
   return fragments[Math.floor(Math.random() * fragments.length)];
 }
+
+
+
