@@ -8,7 +8,17 @@ const clients = new Map();
 let turnOrder = []; // Listado para gestionar los turnos de los jugadores
 let currentTurn = 0;
 let currentFragment; // Fragmento a utilizar en cada turno
+const gameStarted = false;
+let players = [];
+let spectators = [];
 
+function filter(){
+  if(gameStarted===false){
+    players.add(ws)
+  }else{
+    spectators.add(ws)
+  }
+}
 
 // ======== SERVIDOR WEBSOCKET ========
 wss.on('connection', (ws) => {
@@ -90,3 +100,5 @@ function nextTurn() {
 function randomFragment() {
   return fragments[Math.floor(Math.random() * fragments.length)];
 }
+
+
