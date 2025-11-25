@@ -1,6 +1,10 @@
 const loginDiv = document.getElementById('login');
 const nameInput = document.getElementById('nameInput');
 const joinBtn = document.getElementById('joinBtn');
+const difficultyDiv = document.getElementById('difficulty');
+const easyBtn = document.getElementById('easyBtn');
+const normalBtn = document.getElementById('normalBtn');
+const hardBtn = document.getElementById('hardBtn');
 const chatDiv = document.getElementById('chat');
 const messagesList = document.getElementById('messages');
 const msgInput = document.getElementById('msgInput');
@@ -19,23 +23,35 @@ joinBtn.addEventListener('click', () => {
   socket.addEventListener('open', () => {
     socket.send(username);
     loginDiv.style.display = 'none';
-    chatDiv.style.display = 'block';
   });
 
   socket.addEventListener('message', (e) => {
     const text = e.data;
+
+    // Si recibimos el mensaje para seleccionar dificultad
+    if (text === 'SELECT_DIFFICULTY') {
+      difficultyDiv.style.display = 'block';
+      return;
+    }
+
     addMessage(text);
 
-    if (text.startsWith('Es el turno de')) {
+    if (text.includes('Turno de')) {
       turnDiv.textContent = text;
-      // Si es mi turno, activar input
       if (text.includes(username)) {
         msgInput.disabled = false;
         sendBtn.disabled = false;
+        msgInput.focus();
       } else {
         msgInput.disabled = true;
         sendBtn.disabled = true;
       }
+    }
+
+    // Mostrar chat cuando empiece el juego
+    if (text.includes('Dificultad seleccionada')) {
+      difficultyDiv.style.display = 'none';
+      chatDiv.style.display = 'block';
     }
   });
 
@@ -51,11 +67,30 @@ joinBtn.addEventListener('click', () => {
     }
   });
 
+  // Permitir enviar con Enter
+  msgInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendBtn.click();
+    }
+  });
 });
 
+// Eventos para los botones de dificultad
+easyBtn.addEventListener('click', () => {
+  socket.send('facil');
+});
+
+normalBtn.addEventListener('click', () => {
+  socket.send('normal');
+});
+
+hardBtn.addEventListener('click', () => {
+  socket.send('dificil');
+});
 
 function addMessage(text) {
   const li = document.createElement('li');
   li.textContent = text;
   messagesList.appendChild(li);
+  messagesList.scrollTop = messagesList.scrollHeight;
 }
