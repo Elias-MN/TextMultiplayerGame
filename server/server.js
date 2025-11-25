@@ -8,6 +8,7 @@ const clients = new Map();
 let turnOrder = []; // Listado para gestionar los turnos de los jugadores
 let currentTurn = 0;
 let currentFragment; // Fragmento a utilizar en cada turno
+let wordPlayed = new Set(); //Listado para gestionar las palabras repetidas
 
 
 // ======== SERVIDOR WEBSOCKET ========
@@ -38,6 +39,12 @@ wss.on('connection', (ws) => {
       return;
     }
 
+    if (wordUsed(text)) {
+      ws.send(`❌ La palabra "${text}" ya se usó, prueba con otra.`);
+      return;
+    }
+
+
     // En caso de ser válida, llegamos a este punto en el que enviamos la respuesta y pasamos turno
     broadcast(`${name}: ${text}`);
     nextTurn();
@@ -65,6 +72,7 @@ function broadcast(message) {
   for (const client of wss.clients) {
     if (client.readyState === client.OPEN) {
       client.send(message);
+
     }
   }
 }
@@ -91,5 +99,19 @@ function randomFragment() {
   return fragments[Math.floor(Math.random() * fragments.length)];
 }
 
+<<<<<<< HEAD
 
 
+=======
+//Funcion para no repetir las mismas palabras
+function wordUsed(word) {
+  if (wordPlayed.has(word)) {
+    return true;       // ya usada
+  }
+
+  wordPlayed.add(word); // la marcamos como usada
+  console.log("Palabras usadas", wordPlayed);
+  return false;       
+
+}
+>>>>>>> 0cab7e010e8165414af786b83c26f9c0c95f1c73
