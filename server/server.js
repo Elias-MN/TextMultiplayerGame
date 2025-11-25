@@ -51,6 +51,17 @@ wss.on('connection', (ws) => {
     turnOrder = turnOrder.filter(c => c !== ws);
     if (name) broadcast(`${name} ha salido.`);
 
+    let json = {
+      text: `${name} ha salido.`,
+      username: "",
+      fragment: "",
+      turn: "",
+      players: [
+        {playerName: }
+      ]
+    }
+    if (name) broadcast(json);
+
     // Ajustar turno si se fue el jugador activo
     if (currentTurn >= turnOrder.length) currentTurn = 0;
     if (turnOrder.length > 0) announceTurn();
