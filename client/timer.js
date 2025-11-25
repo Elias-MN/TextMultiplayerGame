@@ -17,3 +17,13 @@ startRandomDuration(min = 15, max = 35) {
             this.tick();
         }, 1000);
     }
+
+    tick() {
+        this.timeLeft--;
+        if (this.onTick) this.onTick(this.timeLeft);
+
+        if (this.timeLeft <= 0) {
+            this.stop();
+            if (this.onTimeout) this.onTimeout();
+        }
+    }
