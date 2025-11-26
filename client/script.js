@@ -6,6 +6,7 @@ const messagesList = document.getElementById('messages');
 const msgInput = document.getElementById('msgInput');
 const sendBtn = document.getElementById('sendBtn');
 const turnDiv = document.getElementById('turn');
+const startBtn = document.getElementById('startBtn')
 
 let socket;
 let username;
@@ -23,35 +24,59 @@ joinBtn.addEventListener('click', () => {
   });
 
   socket.addEventListener('message', (e) => {
-    const text = e.data;
-    addMessage(text);
+    let data;
+    try {
+      data = JSON.parse(e.data); // convierte el string en objeto
+      const action = data?.action;
+      if (action === 'READY') {
+        startBtn.classList.remove('hidden');
+      }
+    } catch (err) {
+      console.error('JSON inválido:', e.data);
+      return;
+    }
 
-    if (text.startsWith('Es el turno de')) {
-      turnDiv.textContent = text;
-      // Si es mi turno, activar input
-      if (text.includes(username)) {
-        msgInput.disabled = false;
-        sendBtn.disabled = false;
-      } else {
-        msgInput.disabled = true;
-        sendBtn.disabled = true;
+    // Caso sin `action`: tratar como mensaje genérico o avisar
+    if (typeof data === 'string') {
+      const text = e.data;
+      addMessage(text);
+      if (text.startsWith('Es el turno de')) {
+        turnDiv.textContent = text;
+        // Si es mi turno, activar input
+        if (text.includes(username)) {
+          msgInput.disabled = false;
+          sendBtn.disabled = false;
+        } else {
+          msgInput.disabled = true;
+          sendBtn.disabled = true;
+        }
       }
     }
   });
 
-  socket.addEventListener('close', () => {
-    addMessage(username + ' se ha ido.');
-  });
+// Cuando el jugador se desconecta, el botón de start recupera el estado inicial de hidden.
+socket.addEventListener('close', () => {
+  addMessage(username + ' se ha ido.');
+  startBtn.classList.add('hidden');
+  startBtn.classList.remove('disabled');
+});
 
-  sendBtn.addEventListener('click', () => {
-    const msg = msgInput.value.trim();
-    if (msg) {
-      socket.send(msg);
-      msgInput.value = '';
-    }
-  });
+sendBtn.addEventListener('click', () => {
+  const msg = msgInput.value.trim();
+  if (msg) {
+    socket.send(msg);
+    msgInput.value = '';
+  }
+});
 
 });
+
+// Cuando el administrador pulsa el botón de inicio, se envía la orden de 'start' al servidor.
+startBtn.addEventListener('click', () => {
+  let json = { action: 'START' };
+  socket.send(JSON.stringify(json));
+  startBtn.classList.add('disabled');
+})
 
 
 function addMessage(text) {
