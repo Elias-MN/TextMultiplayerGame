@@ -1,7 +1,8 @@
 export class Player {
-    constructor(user, hpMax = 2) {
-        this.user = user;
-        this.hpMax = hpMax;
-        this.hp = hpMax;
+    constructor(ws, playerName, lifesMax = 2) {
+        this.ws = ws
+        this.playerName = playerName;
+        this.lifesMax = lifesMax;
+        this.lifes = lifesMax;
     }
 }
