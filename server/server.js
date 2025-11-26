@@ -1,6 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { fragments } from './constants.js';
-
+import { setReady } from './modules/init.js';
 
 // ======== VARIABLES DE JUEGO ========
 const wss = new WebSocketServer({ port: 3000 });
@@ -8,10 +8,18 @@ const clients = new Map();
 let turnOrder = []; // Listado para gestionar los turnos de los jugadores
 let currentTurn = 0;
 let currentFragment; // Fragmento a utilizar en cada turno
+let adminSelected = false
+let gameStarted = false
+let players = []
 
 
 // ======== SERVIDOR WEBSOCKET ========
 wss.on('connection', (ws) => {
+
+  if(!adminSelected && players.length() > 1){
+        setReady(players)
+    }
+  
 
   ws.on('message', (message) => {
     const text = message.toString().trim().toLowerCase();
