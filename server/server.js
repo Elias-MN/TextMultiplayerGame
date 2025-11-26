@@ -38,9 +38,10 @@ wss.on('connection', (ws) => {
       countdownInterval = setInterval(function () {
         console.log('Contador: ' + contador);
         contador--;
-        if (contador < 0) {
+        if (contador === 0) {
           clearInterval(countdownInterval);
           console.log('¡Empieza el juego!');
+          gameStarted = true;
         }
       }, 1000);
     } else {
