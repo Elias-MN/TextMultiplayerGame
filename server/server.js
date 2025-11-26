@@ -12,10 +12,10 @@ const gameStarted = false;
 let players = [];
 let spectators = [];
 
-function filter(){
-  if(gameStarted===false){
+function GameMode(){
+  if(gameStarted===false && !players.includes(ws)){
     players.add(ws)
-  }else{
+  }else if(!spectators.includes(ws)){
     spectators.add(ws)
   }
 }
