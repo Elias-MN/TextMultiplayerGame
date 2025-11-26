@@ -4,8 +4,8 @@
   box-sizing: border-box;
 }
 
-#chat {
-  display: none;
+#chat-container{
+  display: block;
 }
 
 #turn {
@@ -13,11 +13,4 @@
   color: darkorange;
 }
 
-/* Botón del juego */
-.btn-exit {
-  display: none;
-}
 
-.hidden {
-  display: none;
-}
