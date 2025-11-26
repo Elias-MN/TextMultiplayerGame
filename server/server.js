@@ -8,6 +8,7 @@ const clients = new Map();
 let turnOrder = []; // Listado para gestionar los turnos de los jugadores
 let currentTurn = 0;
 let currentFragment; // Fragmento a utilizar en cada turno
+let gameStarted = false;
 
 
 // ======== SERVIDOR WEBSOCKET ========
@@ -16,8 +17,29 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     const text = message.toString().trim().toLowerCase();
 
-    let contador = 5; 
+    let contador = 5;
+    let countdownInterval = null;
+    let data;
     
+    try {
+      data = JSON.parse(e.data);
+    } catch (error) {
+      console.error('JSON Invalido ', e.data);
+    }
+
+    if (action === 'START') {
+      countdownInterval = setInterval(function () {
+        console.log('Contador: ' + contador);
+        contador--;
+        if (contador < 0) {
+          clearInterval(countdownInterval);
+          console.log('¡Empieza el juego!');
+        }
+      }, 1000);
+    } else {
+
+    }
+
     if (!clients.has(ws)) {
       clients.set(ws, text);
       // Lo añadimos a la lista de turnos
