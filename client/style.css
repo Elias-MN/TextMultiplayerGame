@@ -13,4 +13,11 @@
   color: darkorange;
 }
 
+/* Botón del juego */
+.btn-exit {
+  display: none;
+}
 
+.hidden {
+  display: none;
+}
