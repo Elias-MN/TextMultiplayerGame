@@ -32,7 +32,7 @@ wss.on('connection', (ws) => {
     }
 
     // Si es el primer jugador y no ha empezado el juego, procesar selección de dificultad
-    if (!gameStarted && turnOrder[0] === ws && ['facil', 'normal', 'dificil'].includes(text)) {
+    if (!gameStarted && turnOrder[0] === ws && ['easy', 'normal', 'hard'].includes(text)) {
       currentDifficulty = text;
       gameStarted = true;
       broadcast(`🎮 Dificultad seleccionada: ${text.toUpperCase()}`);
