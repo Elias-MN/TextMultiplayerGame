@@ -16,6 +16,7 @@ let spectators = [];
 
 // ======== SERVIDOR WEBSOCKET ========
 wss.on('connection', (ws) => {
+  console.log('usuario conectado')
   if(gameStarted===false && !players.includes(ws)){
     players.push(ws)
   }else if(!spectators.includes(ws)){
@@ -31,25 +32,25 @@ wss.on('connection', (ws) => {
     let countdownInterval = null;
     let data;
     
-    try {
-      data = JSON.parse(message.data);
-    } catch (error) {
-      console.error('JSON Invalido ', message.data);
-    }
+    // try {
+    //   data = JSON.parse(message.data);
+    // } catch (error) {
+    //   console.error('JSON Invalido ', message.data);
+    // }
 
-    if (action === 'START') {
-      countdownInterval = setInterval(function () {
-        console.log('Contador: ' + contador);
-        contador--;
-        if (contador === 0) {
-          clearInterval(countdownInterval);
-          console.log('¡Empieza el juego!');
-          gameStarted = true;
-        }
-      }, 1000);
-    } else {
+  //   if (data.action === 'START') {
+  //     countdownInterval = setInterval(function () {
+  //       console.log('Contador: ' + contador);
+  //       contador--;
+  //       if (contador === 0) {
+  //         clearInterval(countdownInterval);
+  //         console.log('¡Empieza el juego!');
+  //         gameStarted = true;
+  //       }
+  //     }, 1000);
+  //   } else {
 
-    }
+  // }
 
     if (!clients.has(ws)) {
       clients.set(ws, text);
