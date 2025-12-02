@@ -8,7 +8,6 @@ const clients = new Map();
 let turnOrder = []; // Listado para gestionar los turnos de los jugadores
 let currentTurn = 0;
 let currentFragment; // Fragmento a utilizar en cada turno
-let adminSelected = false;
 const gameStarted = false;
 let players = [];
 let spectators = [];
@@ -17,13 +16,15 @@ let spectators = [];
 // ======== SERVIDOR WEBSOCKET ========
 wss.on('connection', (ws) => {
   if(gameStarted===false && !players.includes(ws)){
-    players.push(ws)
+    players.add(ws)
   }else if(!spectators.includes(ws)){
-    spectators.push(ws)
+    spectators.add(ws)
   }
-  if(!adminSelected && players.length > 1){
+  if(!adminSelected && players.length() > 1){
         setReady(players)
     }
+  
+
   ws.on('message', (message) => {
     const text = message.toString().trim().toLowerCase();
 
@@ -32,9 +33,9 @@ wss.on('connection', (ws) => {
     let data;
     
     try {
-      data = JSON.parse(message.data);
+      data = JSON.parse(e.data);
     } catch (error) {
-      console.error('JSON Invalido ', message.data);
+      console.error('JSON Invalido ', e.data);
     }
 
     if (action === 'START') {
