@@ -59,3 +59,18 @@ function addMessage(text) {
   li.textContent = text;
   messagesList.appendChild(li);
 }
+
+function chooseDifficulty(){
+  // TODO: implementar desplegable de dificultad en index y modificar constante dificultad
+  const dificultad = "";
+
+  if (dificultad == "facil") {
+    // TODO: Agregar funcion de dificultad facil
+  } else if (dificultad == "normal") {
+    // TODO: Agregar funcion de dificultad normal
+  } else if (dificultad == "dificil") {
+    
+  }else {dificultad = "normal";}
+
+
+}
