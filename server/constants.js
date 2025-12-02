@@ -1,4 +1,6 @@
-export const fragments = [
+export const fragments = {
+  facil:[],
+  normal: [
   "pla", "ple", "pli", "plo", "flu", "tra", "tre", "tri", "tro", "tru",
   "car", "cer", "cor", "cur", "cla", "cle", "cli", "clo", "clu",
   "pan", "pen", "pin", "pon", "pun", "tar", "ter", "tir", "tor", "tur",
@@ -9,4 +11,6 @@ export const fragments = [
   "mal", "mel", "mil", "mol", "mul", "tan", "ten", "tin", "ton", "tun",
   "fel", "fil", "fal", "fol", "ful", "ven", "ver", "vir", "vor", "vul",
   "zar", "zer", "zir", "zor", "zur", "bal", "bel", "bil", "bol", "bul"
-];
+  ],
+  dificil: []
+};
