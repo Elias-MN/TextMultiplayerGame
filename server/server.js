@@ -37,9 +37,12 @@ wss.on('connection', (ws) => {
       ws.send(`❌ Tu palabra debe contener "${currentFragment}"`);
       return;
     }
-
-    // En caso de ser válida, llegamos a este punto en el que enviamos la respuesta y pasamos turno
-    broadcast(`${name}: ${text}`);
+// ======== Función de FragWord parte de Diseño Texto grupo 4 ========
+// Enviar mensaje especial con fragmento para que los clientes lo resalten
+    const safeName = String(name).replace(/\|/g, '');
+    const safeText = String(text).replace(/\|/g, '');
+    const safeFragment = String(currentFragment || '').replace(/\|/g, '');
+    broadcast(`FRAGMSG|${safeName}|${safeText}|${safeFragment}`);
     nextTurn();
 
   });

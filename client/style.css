@@ -12,3 +12,21 @@
   font-weight: bold;
   color: darkorange;
 }
+/* Grupo 4 CSS de Diseño de Texto */
+
+/* Fuente para el fragmento resaltado */
+.frag-font {
+  font-family: monospace;
+  font-style: italic;
+  font-weight: bolder;
+  font-size: 16px;
+  color: red;
+}
+li{
+  font-family: monospace;
+  font-size: 15px;
+}
+h1{
+  font-family: monospace;
+  color: rgb(24, 30, 2);
+}
