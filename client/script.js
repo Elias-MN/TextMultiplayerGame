@@ -1,3 +1,4 @@
+import { fragments } from '../server/constants.js';
 const loginDiv = document.getElementById('login');
 const nameInput = document.getElementById('nameInput');
 const joinBtn = document.getElementById('joinBtn');
@@ -10,6 +11,11 @@ const messagesList = document.getElementById('messages');
 const msgInput = document.getElementById('msgInput');
 const sendBtn = document.getElementById('sendBtn');
 const turnDiv = document.getElementById('turn');
+let dificultad = "normal";
+let secretWord = "";             // palabra que introduce el usuario en dificultad "dificil"
+
+// Agregar los fragmentos en el cliente (mismo contenido que server/constants.js)
+const fragmentsMap = fragments;
 
 let socket;
 let username;
@@ -78,14 +84,30 @@ joinBtn.addEventListener('click', () => {
 // Eventos para los botones de dificultad
 easyBtn.addEventListener('click', () => {
   socket.send('facil');
+  dificultad = "facil";
 });
 
 normalBtn.addEventListener('click', () => {
   socket.send('normal');
+  dificultad = "normal";
 });
 
 hardBtn.addEventListener('click', () => {
   socket.send('dificil');
+  dificultad = "dificil";
+
+  // Tomar la palabra introducida por el usuario: busca un input #secretWordInput o usa prompt
+  const secretInput = document.getElementById('secretWordInput');
+  const raw = secretInput ? secretInput.value : prompt('Introduce la palabra secreta (dificil):');
+  secretWord = raw ? String(raw).trim() : '';
+
+  // Validación: comprobar si la palabra contiene algún fragmento de la dificultad
+  const found = wordContainsFragment(secretWord, 'dificil');
+  if (found) {
+    addMessage(`Palabra guardada (dificil) -> "${secretWord}" contiene fragmento "${found}"`);
+  } else {
+    addMessage(`Palabra guardada (dificil) -> "${secretWord}" NO contiene ningún fragmento 'dificil'`);
+  }
 });
 
 function addMessage(text) {
@@ -95,17 +117,14 @@ function addMessage(text) {
   messagesList.scrollTop = messagesList.scrollHeight;
 }
 
-function chooseDifficulty(){
-  // TODO: implementar desplegable de dificultad en index y modificar constante dificultad
-  const dificultad = "";
-
-  if (dificultad == "easy") {
-    // TODO: Agregar funcion de dificultad facil
-  } else if (dificultad == "normal") {
-    // TODO: Agregar funcion de dificultad normal
-  } else if (dificultad == "hard") {
-    
-  }else {dificultad = "normal";}
-
-
+// Nueva función: devuelve el primer fragmento encontrado o null
+function wordContainsFragment(word, difficulty) {
+  if (!word) return null;
+  const list = fragmentsMap[difficulty];
+  if (!list) return null;
+  const w = String(word).toLowerCase();
+  for (const frag of list) {
+    if (w.includes(String(frag).toLowerCase())) return frag;
+  }
+  return null;
 }
