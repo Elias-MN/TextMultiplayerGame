@@ -8,6 +8,8 @@ const clients = new Map();
 let turnOrder = []; // Listado para gestionar los turnos de los jugadores
 let currentTurn = 0;
 let currentFragment; // Fragmento a utilizar en cada turno
+let currentDifficulty = 'normal'; // Dificultad seleccionada
+let gameStarted = false; // Control de inicio de partida
 
 
 // ======== SERVIDOR WEBSOCKET ========
@@ -16,13 +18,31 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     const text = message.toString().trim().toLowerCase();
 
+    // Si el jugador no está registrado
     if (!clients.has(ws)) {
       clients.set(ws, text);
-      // Lo añadimos a la lista de turnos
       turnOrder.push(ws);
       broadcast(`${text} se ha unido.`, ws);
-      // Si es el primer jugador, comenzar partida
-      if (turnOrder.length === 1) announceTurn();
+      
+      // Si es el primer jugador, pedir selección de dificultad
+      if (turnOrder.length === 1) {
+        ws.send('SELECT_DIFFICULTY');
+      }
+      return;
+    }
+
+    // Si es el primer jugador y no ha empezado el juego, procesar selección de dificultad
+    if (!gameStarted && turnOrder[0] === ws && ['facil', 'normal', 'dificil'].includes(text)) {
+      currentDifficulty = text;
+      gameStarted = true;
+      broadcast(`🎮 Dificultad seleccionada: ${text.toUpperCase()}`);
+      setTimeout(() => announceTurn(), 1000); // Pequeña pausa antes de comenzar
+      return;
+    }
+
+    // Si el juego no ha comenzado, ignorar mensajes de otros jugadores
+    if (!gameStarted) {
+      ws.send('⏳ Esperando a que el primer jugador seleccione la dificultad...');
       return;
     }
 
@@ -51,9 +71,17 @@ wss.on('connection', (ws) => {
     turnOrder = turnOrder.filter(c => c !== ws);
     if (name) broadcast(`${name} ha salido.`);
 
+    // Si no queda nadie, resetear el juego
+    if (turnOrder.length === 0) {
+      gameStarted = false;
+      currentDifficulty = 'normal';
+      currentTurn = 0;
+      return;
+    }
+
     // Ajustar turno si se fue el jugador activo
     if (currentTurn >= turnOrder.length) currentTurn = 0;
-    if (turnOrder.length > 0) announceTurn();
+    if (turnOrder.length > 0 && gameStarted) announceTurn();
 
   });
 
@@ -86,7 +114,8 @@ function nextTurn() {
   currentTurn = (currentTurn + 1) % turnOrder.length;
   announceTurn();
 }
-// Función para obtener un fragmento aleatorio
+// Función para obtener un fragmento aleatorio según la dificultad
 function randomFragment() {
-  return fragments[Math.floor(Math.random() * fragments.length)];
+  const difficultyFragments = fragments[currentDifficulty];
+  return difficultyFragments[Math.floor(Math.random() * difficultyFragments.length)];
 }

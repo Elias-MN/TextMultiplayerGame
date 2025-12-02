@@ -26,5 +26,4 @@ dificult:[
   "mal", "mel", "mil", "mol", "mul", "tan", "ten", "tin", "ton", "tun",
   "fel", "fil", "fal", "fol", "ful", "ven", "ver", "vir", "vor", "vul",
   "zar", "zer", "zir", "zor", "zur", "bal", "bel", "bil", "bol", "bul"
-]
-};
+]};
