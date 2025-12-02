@@ -1,4 +1,25 @@
-export const words = [
+/**
+ * Pasammos una palabra, le quitamos los espacios en blancos, acentos y mayusculas
+ * Comprobamos que la palabra este dentro del diccionario
+ * 
+ * @param userWord: palabra escrita por el usuario
+ * @param dictionary: pasamos el diccionario 
+ * @returns Si la palabra esta devuelve TRUE sino FALSE
+ */
+export function wordFound(userWord, dictionary) {
+    const word = userWord
+        .toLowerCase() // Lo hacemos minusculas
+        .trim() // Quitamos espacioes en blanco
+        .normalize("NFD") // Descompone los caracteres en sus componentes bases ("e" + "´")
+        .replace(/[\u0300-\u036f]/g, "") // Busca cualquier caracter y elimina acentos
+        ;
+
+    if (dictionary.includes(word)) {
+        return true;
+    } else return false;
+}
+
+export const dictionary = [
     "a",
     "aba",
     "abaá",
